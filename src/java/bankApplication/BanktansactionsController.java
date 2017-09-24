@@ -24,8 +24,10 @@ public class BanktansactionsController implements Serializable {
 
 
     @EJB private bankApplication.BanktansactionsFacade ejbFacade;
+    @EJB private bankApplication.AccountFacade ejbFacade1;
     private List<Banktansactions> items = null;
     private Banktansactions selected;
+    
 
     public BanktansactionsController() {
     }
@@ -46,6 +48,9 @@ public class BanktansactionsController implements Serializable {
 
     private BanktansactionsFacade getFacade() {
         return ejbFacade;
+    }
+    private AccountFacade getFacade1() {
+        return ejbFacade1;
     }
 
     public Banktansactions prepareCreate() {
@@ -86,6 +91,12 @@ public class BanktansactionsController implements Serializable {
             try {
                 if (persistAction != PersistAction.DELETE) {
                     getFacade().edit(selected);
+                    Account a = getFacade1().find(selected.getAccountid().getAcid());
+                    a.setAcbal((double)selected.getAmount());
+                    System.out.println(a.getAcbal());
+                    getFacade1().edit(a);
+                    items = null;   
+                    
                 } else {
                     getFacade().remove(selected);
                 }

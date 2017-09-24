@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AccountCreateDlg" widgetVar="AccountCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateAccountTitle}">
+            <h:form id="AccountCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{accountController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateAccountLabel_acid}" for="acid" />
+                        <p:inputText id="acid" value="#{accountController.selected.acid}" title="#{bundle.CreateAccountTitle_acid}" required="true" requiredMessage="#{bundle.CreateAccountRequiredMessage_acid}"/>
+                        <p:outputLabel value="#{bundle.CreateAccountLabel_acbal}" for="acbal" />
+                        <p:inputText id="acbal" value="#{accountController.selected.acbal}" title="#{bundle.CreateAccountTitle_acbal}" />
+                        <p:outputLabel value="#{bundle.CreateAccountLabel_actype}" for="actype" />
+                        <p:inputText id="actype" value="#{accountController.selected.actype}" title="#{bundle.CreateAccountTitle_actype}" />
+                        <p:outputLabel value="#{bundle.CreateAccountLabel_custid}" for="custid" />
+                        <p:selectOneMenu id="custid" value="#{accountController.selected.custid}" >
+                            <f:selectItems value="#{customeruserController.itemsAvailableSelectOne}"
+                                           var="custidItem"
+                                           itemValue="#{custidItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{accountController.create}" value="#{bundle.Save}" update="display,:AccountListForm:datalist,:growl" oncomplete="handleSubmit(args,'AccountCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="AccountCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -12,8 +12,6 @@
             <h:form id="AccountCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{accountController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateAccountLabel_acid}" for="acid" />
-                        <p:inputText id="acid" value="#{accountController.selected.acid}" title="#{bundle.CreateAccountTitle_acid}" required="true" requiredMessage="#{bundle.CreateAccountRequiredMessage_acid}"/>
                         <p:outputLabel value="#{bundle.CreateAccountLabel_acbal}" for="acbal" />
                         <p:inputText id="acbal" value="#{accountController.selected.acbal}" title="#{bundle.CreateAccountTitle_acbal}" />
                         <p:outputLabel value="#{bundle.CreateAccountLabel_actype}" for="actype" />

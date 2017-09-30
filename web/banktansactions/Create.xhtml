@@ -12,8 +12,6 @@
             <h:form id="BanktansactionsCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{banktansactionsController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_trid}" for="trid" />
-                        <p:inputText id="trid" value="#{banktansactionsController.selected.trid}" title="#{bundle.CreateBanktansactionsTitle_trid}" required="true" requiredMessage="#{bundle.CreateBanktansactionsRequiredMessage_trid}"/>
                         <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_amount}" for="amount" />
                         <p:inputText id="amount" value="#{banktansactionsController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />
                         <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_trtime}" for="trtime" />

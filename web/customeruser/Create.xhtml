@@ -12,8 +12,6 @@
             <h:form id="CustomeruserCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{customeruserController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateCustomeruserLabel_cusid}" for="cusid" />
-                        <p:inputText id="cusid" value="#{customeruserController.selected.cusid}" title="#{bundle.CreateCustomeruserTitle_cusid}" required="true" requiredMessage="#{bundle.CreateCustomeruserRequiredMessage_cusid}"/>
                         <p:outputLabel value="#{bundle.CreateCustomeruserLabel_firstname}" for="firstname" />
                         <p:inputText id="firstname" value="#{customeruserController.selected.firstname}" title="#{bundle.CreateCustomeruserTitle_firstname}" />
                         <p:outputLabel value="#{bundle.CreateCustomeruserLabel_lastname}" for="lastname" />

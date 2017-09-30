@@ -20,9 +20,10 @@
                 <h:form id="menuForm">
                     <p:menubar>
                         <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
-                        <p:submenu label="#{bundle.Maintenance}">
+                        <p:submenu label="#{bundle.Manage}">
                             <p:menuitem value="Account" outcome="/account/List.xhtml" />
                             <p:menuitem value="Customeruser" outcome="/customeruser/List.xhtml" />
+                            <p:menuitem value="Transactions" outcome="/banktansactions/List.xhtml" />
                         </p:submenu>
                     </p:menubar>
                 </h:form>

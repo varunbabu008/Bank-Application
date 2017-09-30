@@ -99,18 +99,11 @@ public class BanktansactionsController implements Serializable {
                         getFacade().edit(selected);
                         a.setAcbal(checkbalance);
                         System.out.println(a.getAcbal());
-                        getFacade1().edit(a);
-                        // AccountController b = new AccountController();
+                        getFacade1().edit(a);                        
                         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
                         AccountController b = (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
                         b.destroyItems();
-                        
-       
-                        //getFacade1().refresh(a);
-                        //getFacade1().flush(a);
-                        
                        
-                        // Invalidate list of items to trigger re-query.
                     }
                     else{
                         JsfUtil.addErrorMessage("Insufficient funds");

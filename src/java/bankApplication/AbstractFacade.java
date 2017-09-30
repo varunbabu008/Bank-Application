@@ -29,6 +29,15 @@ public abstract class AbstractFacade<T> {
     public void edit(T entity) {
         getEntityManager().merge(entity);
     }
+    
+    public void refresh(T entity) {
+        // getEntityManager().getEntityManagerFactory().getCache().evictAll();
+        getEntityManager().refresh(entity);
+    }
+    public void flush(T entity) {
+        // getEntityManager().getEntityManagerFactory().getCache().evictAll();
+        getEntityManager().flush();
+    }
 
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));

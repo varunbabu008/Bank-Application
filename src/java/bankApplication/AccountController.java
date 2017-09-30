@@ -72,6 +72,10 @@ public class AccountController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
+    
+    public void destroyItems(){
+        items = null; 
+    }
 
     public List<Account> getItems() {
         if (items == null) {

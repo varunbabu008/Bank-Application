@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELContext;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -26,6 +27,7 @@ public class BanktansactionsController implements Serializable {
     @EJB private bankApplication.BanktansactionsFacade ejbFacade;
     @EJB private bankApplication.AccountFacade ejbFacade1;
     private List<Banktansactions> items = null;
+    
     private Banktansactions selected;
     
 
@@ -90,12 +92,34 @@ public class BanktansactionsController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
                     Account a = getFacade1().find(selected.getAccountid().getAcid());
-                    a.setAcbal((double)selected.getAmount());
-                    System.out.println(a.getAcbal());
-                    getFacade1().edit(a);
-                    items = null;   
+                    double checkbalance = a.getAcbal() - (double)selected.getAmount();
+                    if(checkbalance > 0)
+                    {
+                        getFacade().edit(selected);
+                        a.setAcbal(checkbalance);
+                        System.out.println(a.getAcbal());
+                        getFacade1().edit(a);
+                        // AccountController b = new AccountController();
+                        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+                        AccountController b = (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
+                        b.destroyItems();
+                        
+       
+                        //getFacade1().refresh(a);
+                        //getFacade1().flush(a);
+                        
+                       
+                        // Invalidate list of items to trigger re-query.
+                    }
+                    else{
+                        JsfUtil.addErrorMessage("Insufficient funds");
+                        items = null;    // Invalidate list of items to trigger re-query.
+                        return;
+                        
+                    }
+              
+                  
                     
                 } else {
                     getFacade().remove(selected);

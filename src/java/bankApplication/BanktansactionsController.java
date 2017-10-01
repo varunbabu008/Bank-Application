@@ -5,6 +5,7 @@ import bankApplication.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ public class BanktansactionsController implements Serializable {
     @EJB private bankApplication.BanktansactionsFacade ejbFacade;
     @EJB private bankApplication.AccountFacade ejbFacade1;
     private List<Banktansactions> items = null;
+    private List<Banktansactions> filteredItems = null;
     
     private Banktansactions selected;
     
@@ -85,6 +87,26 @@ public class BanktansactionsController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
+    }
+    
+     public List<Banktansactions> getFilteredItems() {
+        return filteredItems;
+    }
+     public void setFilteredItems(List<Banktansactions> filteredItems) {
+        this.filteredItems = filteredItems;
+    }
+     
+     public boolean filterByBalance(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+         
+        return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

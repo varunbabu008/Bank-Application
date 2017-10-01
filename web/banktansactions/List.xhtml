@@ -18,6 +18,7 @@
                 <p:panel header="#{bundle.ListBanktansactionsTitle}">
                     <p:dataTable id="datalist" value="#{banktansactionsController.items}" var="item"
                                  selectionMode="single" selection="#{banktansactionsController.selected}"
+                                 widgetVar="transactionTable" emptyMessage="No Transactions were found"
                                  paginator="true"
                                  rowKey="#{item.trid}"
                                  rows="10"
@@ -26,18 +27,26 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
-                        <p:column>
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('transactionTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column filterBy="#{item.trid}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListBanktansactionsTitle_trid}"/>
                             </f:facet>
                             <h:outputText value="#{item.trid}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.amount}" footerText="custom (min)" filterFunction="#{banktansactionsController.filterByBalance}">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBanktansactionsTitle_amount}"/>
+                                <h:outputText value="#{bundle.ListBanktansactionsTitle_amount}">
+                                </h:outputText>
                             </f:facet>
-                            <h:outputText value="#{item.amount}"/>
+                            <h:outputText value="#{item.amount}">
+                                <f:convertNumber currencySymbol="$" type="currency"/>
+                            </h:outputText>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
@@ -47,7 +56,7 @@
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.accountid}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListBanktansactionsTitle_accountid}"/>
                             </f:facet>

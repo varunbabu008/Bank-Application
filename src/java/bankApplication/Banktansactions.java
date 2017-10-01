@@ -53,6 +53,8 @@ public class Banktansactions implements Serializable {
     @JoinColumn(name = "ACCOUNTID", referencedColumnName = "ACID")
     @ManyToOne
     private Account accountid;
+    
+    private Account fromaccnt;
 
     public Banktansactions() {
     }
@@ -96,6 +98,14 @@ public class Banktansactions implements Serializable {
 
     public void setAccountid(Account accountid) {
         this.accountid = accountid;
+    }
+    
+    public Account getFromaccnt() {
+        return fromaccnt;
+    }
+
+    public void setFromaccnt(Account fromaccnt) {
+        this.fromaccnt = fromaccnt;
     }
 
     @Override

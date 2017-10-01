@@ -115,13 +115,17 @@ public class BanktansactionsController implements Serializable {
             try {
                 if (persistAction != PersistAction.DELETE) {
                     Account a = getFacade1().find(selected.getAccountid().getAcid());
+                    Account c = getFacade1().find(selected.getFromaccnt().getAcid());
                     double checkbalance = a.getAcbal() - (double)selected.getAmount();
                     if(checkbalance > 0)
                     {
                         getFacade().edit(selected);
                         a.setAcbal(checkbalance);
+                        double newbal = c.getAcbal() + (double)selected.getAmount();
+                        c.setAcbal(newbal);
                         System.out.println(a.getAcbal());
-                        getFacade1().edit(a);                        
+                        getFacade1().edit(a);
+                        getFacade1().edit(c); 
                         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
                         AccountController b = (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
                         b.destroyItems();

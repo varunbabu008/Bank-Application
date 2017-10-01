@@ -125,7 +125,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "bankApplication.Account[ acid=" + acid + " ]";
+        return "A/C No: " + acid + " ]";
     }
     
 }

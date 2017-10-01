@@ -16,12 +16,19 @@
                         <p:inputText id="amount" value="#{banktansactionsController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />
                         <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_trtime}" for="trtime" />
                         <p:calendar id="trtime" pattern="MM/dd/yyyy" value="#{banktansactionsController.selected.trtime}" title="#{bundle.EditBanktansactionsTitle_trtime}" required="true" requiredMessage="#{bundle.EditBanktansactionsRequiredMessage_trtime}" showOn="button"/>
-                        <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_accountid}" for="accountid" />
+                        <p:outputLabel value="From Account" for="accountid1" />
+                        <p:selectOneMenu id="accountid1" value="#{banktansactionsController.selected.fromaccnt}" >
+                            <f:selectItems value="#{accountController.itemsAvailableSelectOne}"
+                                           var="accountidItem"
+                                           itemValue="#{accountidItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="To Account" for="accountid" />
                         <p:selectOneMenu id="accountid" value="#{banktansactionsController.selected.accountid}" >
                             <f:selectItems value="#{accountController.itemsAvailableSelectOne}"
                                            var="accountidItem"
                                            itemValue="#{accountidItem}"/>
                         </p:selectOneMenu>
+                        
                     </p:panelGrid>
                     <p:commandButton actionListener="#{banktansactionsController.create}" value="#{bundle.Save}" update="display,:BanktansactionsListForm:datalist,:growl" oncomplete="handleSubmit(args,'BanktansactionsCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="BanktansactionsCreateDialog.hide()"/>

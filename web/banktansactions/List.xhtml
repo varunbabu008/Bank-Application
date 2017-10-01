@@ -56,12 +56,19 @@
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
                             </h:outputText>
                         </p:column>
+                        <p:column filterBy="#{item.fromaccnt}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="From Account"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fromaccnt}"/>
+                        </p:column>
                         <p:column filterBy="#{item.accountid}" filterMatchMode="contains">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBanktansactionsTitle_accountid}"/>
+                                <h:outputText value="To Account"/>
                             </f:facet>
                             <h:outputText value="#{item.accountid}"/>
                         </p:column>
+                        
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{banktansactionsController.prepareCreate}" update=":BanktansactionsCreateForm" oncomplete="PF('BanktansactionsCreateDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BanktansactionsViewForm" oncomplete="PF('BanktansactionsViewDialog').show()" disabled="#{empty banktansactionsController.selected}"/>

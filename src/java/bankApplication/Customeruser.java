@@ -172,7 +172,7 @@ public class Customeruser implements Serializable {
 
     @Override
     public String toString() {
-        return "bankApplication.Customeruser[ cusid=" + cusid + " ]";
+        return "CustomerID: " + cusid + " ]";
     }
     
 }

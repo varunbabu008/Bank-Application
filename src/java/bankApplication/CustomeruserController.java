@@ -24,6 +24,7 @@ public class CustomeruserController implements Serializable {
     @EJB
     private bankApplication.CustomeruserFacade ejbFacade;
     private List<Customeruser> items = null;
+    private List<Customeruser> filteredItems = null;
     private Customeruser selected;
 
     public CustomeruserController() {
@@ -72,6 +73,13 @@ public class CustomeruserController implements Serializable {
         }
     }
 
+    public List<Customeruser> getFilteredItems() {
+        return filteredItems;
+    }
+ 
+    public void setFilteredItems(List<Customeruser> filteredItems) {
+        this.filteredItems = filteredItems;
+    }
     public List<Customeruser> getItems() {
         if (items == null) {
             items = getFacade().findAll();

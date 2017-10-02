@@ -18,6 +18,7 @@
                 <p:panel header="#{bundle.ListCustomeruserTitle}">
                     <p:dataTable id="datalist" value="#{customeruserController.items}" var="item"
                                  selectionMode="single" selection="#{customeruserController.selected}"
+                                 widgetVar="customerTable" emptyMessage="No customers were found"
                                  paginator="true"
                                  rowKey="#{item.cusid}"
                                  rows="10"
@@ -26,44 +27,49 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
-                        <p:column>
+                         <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('customerTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column filterBy="#{item.cusid}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_cusid}"/>
                             </f:facet>
                             <h:outputText value="#{item.cusid}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.firstname}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_firstname}"/>
                             </f:facet>
                             <h:outputText value="#{item.firstname}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.lastname}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_lastname}"/>
                             </f:facet>
                             <h:outputText value="#{item.lastname}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.email}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_email}"/>
                             </f:facet>
                             <h:outputText value="#{item.email}"/>
-                        </p:column>
-                        <p:column>
+                        </p:column >
+                        <p:column filterBy="#{item.password}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_password}"/>
                             </f:facet>
                             <h:outputText value="#{item.password}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.address}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_address}"/>
                             </f:facet>
                             <h:outputText value="#{item.address}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.phonenumber}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_phonenumber}"/>
                             </f:facet>

@@ -6,6 +6,7 @@ import bankApplication.util.JsfUtil.PersistAction;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,34 +115,32 @@ public class BanktansactionsController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    Account from = getFacade1().find(selected.getFromaccnt().getAcid());
-                    Account to = getFacade1().find(selected.getAccountid().getAcid());
-                    
-                    double checkbalance = to.getAcbal() - (double)selected.getAmount();
-                    if(checkbalance > 0)
-                    {
-                        getFacade().edit(selected);
-                        
-                        double frombal = from.getAcbal() + (double)selected.getAmount();
-                        to.setAcbal(frombal);
-                        from.setAcbal(checkbalance);
-                        getFacade1().edit(to);
-                        getFacade1().edit(from); 
-                        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-                        AccountController b = (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
-                        // for triggering requery
-                        b.destroyItems();
-                       
+                    AccountController ac = retrieveAccountController();
+                    Account to = ac.getFacade().find(selected.getAccountid().getAcid());
+                    Account from = ac.getFacade().find(selected.getFromaccnt().getAcid());
+
+                    if (Objects.equals(to.getAcid(), from.getAcid())) {
+                        JsfUtil.addErrorMessage("Cannot transfer funds to your own account");
+                        return;
                     }
-                    else{
+                    double checkbalance = from.getAcbal() - (double) selected.getAmount();
+                    if (checkbalance > 0) {
+
+                        getFacade().edit(selected);
+                        double fromBal = from.getAcbal() - (double) selected.getAmount();
+                        double tobal = to.getAcbal() + (double) selected.getAmount();
+
+                        to.setAcbal(tobal);
+                        from.setAcbal(fromBal);
+                        ac.getFacade().edit(to);
+                        ac.getFacade().edit(from);                  
+                        ac.destroyItems();
+
+                    } else {
                         JsfUtil.addErrorMessage("Insufficient funds");
                         items = null;    // Invalidate list of items to trigger re-query.
                         return;
-                        
                     }
-              
-                  
-                    
                 } else {
                     getFacade().remove(selected);
                 }
@@ -162,6 +161,11 @@ public class BanktansactionsController implements Serializable {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
+    }
+
+    public AccountController retrieveAccountController(){
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        return (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
     }
 
     public Banktansactions getBanktansactions(java.lang.Integer id) {

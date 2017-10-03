@@ -44,7 +44,7 @@ public class AccountController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private AccountFacade getFacade() {
+    public AccountFacade getFacade() {
         return ejbFacade;
     }
 

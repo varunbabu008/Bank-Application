@@ -42,8 +42,13 @@
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListAccountTitle_actype}"/>
+                                <p:selectOneButton>
+                                    <f:converter converterId="javax.faces.Integer" />
+                                    <f:selectItem itemLabel="S" itemValue="1" />
+                                    <f:selectItem itemLabel="C" itemValue="2" />                      
+                                </p:selectOneButton>
                             </f:facet>
-                            <h:outputText value="#{item.actype}"/>
+                            <h:outputText value="#{item.actype ==1 ? 'Saving': 'Credit'}" />                           
                         </p:column>
                         <p:column>
                             <f:facet name="header">

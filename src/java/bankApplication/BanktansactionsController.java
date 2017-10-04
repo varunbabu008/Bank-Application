@@ -4,10 +4,16 @@ import bankApplication.util.JsfUtil;
 import bankApplication.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -27,7 +33,6 @@ public class BanktansactionsController implements Serializable {
 
 
     @EJB private bankApplication.BanktansactionsFacade ejbFacade;
-    @EJB private bankApplication.AccountFacade ejbFacade1;
     private List<Banktansactions> items = null;
     private List<Banktansactions> filteredItems = null;
     
@@ -53,9 +58,6 @@ public class BanktansactionsController implements Serializable {
 
     private BanktansactionsFacade getFacade() {
         return ejbFacade;
-    }
-    private AccountFacade getFacade1() {
-        return ejbFacade1;
     }
 
     public Banktansactions prepareCreate() {
@@ -124,8 +126,8 @@ public class BanktansactionsController implements Serializable {
                         return;
                     }
                     double checkbalance = from.getAcbal() - (double) selected.getAmount();
-                    if (checkbalance > 0) {
-
+                    if (checkbalance > 0) {                       
+                        selected.setTrtime(getCurrentTime());
                         getFacade().edit(selected);
                         double fromBal = from.getAcbal() - (double) selected.getAmount();
                         double tobal = to.getAcbal() + (double) selected.getAmount();
@@ -162,7 +164,15 @@ public class BanktansactionsController implements Serializable {
             }
         }
     }
-
+    
+    public Date getCurrentTime() {
+        Calendar calendar = new GregorianCalendar();
+        TimeZone timeZone = TimeZone.getTimeZone("Australia/Sydney");
+        calendar.setTimeZone(timeZone);
+        Date currentTime = calendar.getTime();
+        return currentTime;
+    }
+    
     public AccountController retrieveAccountController(){
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         return (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");

@@ -13,9 +13,13 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{accountController.selected != null}">
                         <p:outputLabel value="#{bundle.CreateAccountLabel_acbal}" for="acbal" />
-                        <p:inputText id="acbal" value="#{accountController.selected.acbal}" title="#{bundle.CreateAccountTitle_acbal}" />
-                        <p:outputLabel value="#{bundle.CreateAccountLabel_actype}" for="actype" />
-                        <p:inputText id="actype" value="#{accountController.selected.actype}" title="#{bundle.CreateAccountTitle_actype}" />
+                        <p:inputText id="acbal" value="#{accountController.selected.acbal}" title="#{bundle.CreateAccountTitle_acbal}" />                        
+                        <p:outputLabel value="#{bundle.CreateAccountLabel_actype}"/>
+                        <p:selectOneMenu value="#{accountController.selected.actype}">
+                            <f:converter converterId="javax.faces.Integer" />
+                            <f:selectItem itemLabel="Savings" itemValue="1" />
+                            <f:selectItem itemLabel="Credit" itemValue="2" />
+                        </p:selectOneMenu>                     
                         <p:outputLabel value="#{bundle.CreateAccountLabel_custid}" for="custid" />
                         <p:selectOneMenu id="custid" value="#{accountController.selected.custid}" >
                             <f:selectItems value="#{customeruserController.itemsAvailableSelectOne}"

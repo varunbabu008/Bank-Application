@@ -76,10 +76,14 @@
                             <h:outputText value="#{item.phonenumber}"/>
                         </p:column>
                         <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListCustomeruserTitle_types}"/>
+                            <f:facet name="header">                                
+                                <p:selectOneButton onchange="PF('customerTable').filter()">
+                                    <f:converter converterId="javax.faces.Integer" />
+                                    <f:selectItem itemLabel="P" itemValue="1" />
+                                    <f:selectItem itemLabel="BW" itemValue="2" />                      
+                                </p:selectOneButton>
                             </f:facet>
-                            <h:outputText value="#{item.types}"/>
+                            <h:outputText value="#{item.types ==1 ? 'Public': 'BankWorker'}" />
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{customeruserController.prepareCreate}" update=":CustomeruserCreateForm" oncomplete="PF('CustomeruserCreateDialog').show()"/>

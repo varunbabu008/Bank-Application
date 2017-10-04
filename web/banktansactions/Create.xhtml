@@ -13,9 +13,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{banktansactionsController.selected != null}">
                         <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_amount}" for="amount" />
-                        <p:inputText id="amount" value="#{banktansactionsController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />
-                        <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_trtime}" for="trtime" />
-                        <p:calendar id="trtime" pattern="MM/dd/yyyy" value="#{banktansactionsController.selected.trtime}" title="#{bundle.EditBanktansactionsTitle_trtime}" required="true" requiredMessage="#{bundle.EditBanktansactionsRequiredMessage_trtime}" showOn="button"/>
+                        <p:inputText id="amount" value="#{banktansactionsController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />                      
                         <p:outputLabel value="From Account" for="accountid1" />
                         <p:selectOneMenu id="accountid1" value="#{banktansactionsController.selected.fromaccnt}" >
                             <f:selectItems value="#{accountController.itemsAvailableSelectOne}"

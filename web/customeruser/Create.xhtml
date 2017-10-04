@@ -24,8 +24,12 @@
                         <p:inputText id="address" value="#{customeruserController.selected.address}" title="#{bundle.CreateCustomeruserTitle_address}" />
                         <p:outputLabel value="#{bundle.CreateCustomeruserLabel_phonenumber}" for="phonenumber" />
                         <p:inputText id="phonenumber" value="#{customeruserController.selected.phonenumber}" title="#{bundle.CreateCustomeruserTitle_phonenumber}" />
-                        <p:outputLabel value="#{bundle.CreateCustomeruserLabel_types}" for="types" />
-                        <p:inputText id="types" value="#{customeruserController.selected.types}" title="#{bundle.CreateCustomeruserTitle_types}" />
+                        <p:outputLabel value="#{bundle.CreateCustomeruserLabel_types}"/>
+                        <p:selectOneMenu value="#{customeruserController.selected.types}">
+                            <f:converter converterId="javax.faces.Integer" />
+                            <f:selectItem itemLabel="Public" itemValue="1" />
+                            <f:selectItem itemLabel="BankWorker" itemValue="2" />
+                        </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{customeruserController.create}" value="#{bundle.Save}" update="display,:CustomeruserListForm:datalist,:growl" oncomplete="handleSubmit(args,'CustomeruserCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CustomeruserCreateDialog.hide()"/>

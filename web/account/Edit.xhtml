@@ -7,13 +7,10 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-
         <p:dialog id="AccountEditDlg" widgetVar="AccountEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditAccountTitle}">
             <h:form id="AccountEditForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{accountController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditAccountLabel_acid}" for="acid" />
-                        <p:inputText id="acid" value="#{accountController.selected.acid}" title="#{bundle.EditAccountTitle_acid}" required="true" requiredMessage="#{bundle.EditAccountRequiredMessage_acid}"/>
+                    <p:panelGrid columns="2" rendered="#{accountController.selected != null}">                       
                         <p:outputLabel value="#{bundle.EditAccountLabel_acbal}" for="acbal" />
                         <p:inputText id="acbal" value="#{accountController.selected.acbal}" title="#{bundle.EditAccountTitle_acbal}" />
                         <p:outputLabel value="#{bundle.EditAccountLabel_actype}" for="actype" />
@@ -31,6 +28,5 @@
                 </h:panelGroup>
             </h:form>
         </p:dialog>
-
     </ui:composition>
 </html>

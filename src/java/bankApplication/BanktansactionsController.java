@@ -38,7 +38,6 @@ public class BanktansactionsController implements Serializable {
     
     private Banktansactions selected;
     
-
     public BanktansactionsController() {
     }
 

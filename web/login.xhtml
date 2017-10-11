@@ -5,12 +5,15 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
         <title>TODO supply a title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
-    <body>
+<!--    <body>
         <h1>User Authentication</h1>
         <form method="POST" action="j_security_check">
             <label for="j_username">Username:</label>
@@ -19,5 +22,19 @@ and open the template in the editor.
             <input type="password" name="j_password" />
             <input type="submit" value="Submit"/>
         </form>
+    </body>-->
+    <body>
+       <h:form>
+    <h:outputLabel for="username" value="Username" />
+    <h:inputText id="username" value="#{auth.username}" required="true" />
+    <h:message for="username" />
+    <br />
+    <h:outputLabel for="password" value="Password" />
+    <h:inputSecret id="password" value="#{auth.password}" required="true" />
+    <h:message for="password" />
+    <br />
+    <h:commandButton value="Login" action="#{auth.login}" />
+    <h:messages globalOnly="true" />
+</h:form> 
     </body>
 </html>

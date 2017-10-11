@@ -6,16 +6,19 @@
 package bankApplication;
 
 import java.io.IOException;
-import javax.annotation.ManagedBean;
+import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ELContext;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.persistence.TypedQuery;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @ManagedBean
 @ViewScoped
-public class Auth {
+public class Auth implements Serializable{
 
     private String username;
     private String password;
@@ -48,8 +51,30 @@ public class Auth {
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
 
-    public void login() throws IOException {
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getOriginalURL() {
+        return originalURL;
+    }
+
+    public void setOriginalURL(String originalURL) {
+        this.originalURL = originalURL;
+    }
+     public void login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
@@ -57,7 +82,12 @@ public class Auth {
         try {
             request.login(username, password);
             UsersController uc = retrieveUsersController();
-            Users user = uc.getFacade().find(1);
+            
+            // had to change getEntity manager from protected to public - Not so good
+            TypedQuery<Users> query = 
+                    uc.getFacade().getEntityManager().
+                    createNamedQuery("Users.findByUsername", Users.class).setParameter("username", username);
+            Users user = query.getSingleResult();           
             externalContext.getSessionMap().put("user", user);
             externalContext.redirect(originalURL);
         } catch (ServletException e) {
@@ -66,16 +96,15 @@ public class Auth {
         }
     }
 
-    public void logout() throws IOException {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        externalContext.invalidateSession();
-        externalContext.redirect(externalContext.getRequestContextPath() + "/login.xhtml");
-    }
 
-    // Getters/setters for username and password.
+    public String logout() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return  "/index?faces-redirect=true";
+    }
     
      public UsersController retrieveUsersController(){
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-        return (UsersController) elContext.getELResolver().getValue(elContext, null, "accountController");
+        return (UsersController) elContext.getELResolver().getValue(elContext, null, "usersController");
     }
+     
 }

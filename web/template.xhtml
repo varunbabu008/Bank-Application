@@ -27,6 +27,7 @@
                             <p:menuitem value="Transactions" outcome="/banktansactions/List.xhtml" />
                         </p:submenu>
                     </p:menubar>
+                    <h:commandButton value = "Logout!" action="#{login.logout()}"/>     
                 </h:form>
             </p:layoutUnit>
 
@@ -39,7 +40,7 @@
             </p:layoutUnit>
 
         </p:layout>
-
+        
     </h:body>
 
 </html>

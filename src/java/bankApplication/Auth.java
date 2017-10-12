@@ -74,7 +74,7 @@ public class Auth implements Serializable{
     public void setOriginalURL(String originalURL) {
         this.originalURL = originalURL;
     }
-     public void login() throws IOException {
+     public String login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
@@ -86,20 +86,23 @@ public class Auth implements Serializable{
             // had to change getEntity manager from protected to public - Not so good
             TypedQuery<Users> query = 
                     uc.getFacade().getEntityManager().
-                    createNamedQuery("Users.findByUsername", Users.class).setParameter("username", username);
+                    createNamedQuery("Users.findByUsername", Users.class).
+                    setParameter("username", username);
             Users user = query.getSingleResult();           
             externalContext.getSessionMap().put("user", user);
-            externalContext.redirect(originalURL);
+            // externalContext.redirect(originalURL);
+            return "/admin/index";
         } catch (ServletException e) {
             // Handle unknown username/password in request.login().
             context.addMessage(null, new FacesMessage("Unknown login"));
+            return "/login";
         }
     }
 
 
     public String logout() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return  "/index?faces-redirect=true";
+        return  "/login?faces-redirect=true";
     }
     
      public UsersController retrieveUsersController(){

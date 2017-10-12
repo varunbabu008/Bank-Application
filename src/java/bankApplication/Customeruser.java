@@ -52,14 +52,14 @@ public class Customeruser implements Serializable {
     @Size(max = 20)
     @Column(name = "LASTNAME")
     private String lastname;
-    @Size(max = 20)
+    @Size(max = 60)
     @Column(name = "USERNAME")
     private String username;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 20)
     @Column(name = "EMAIL")
     private String email;
-    @Size(max = 20)
+    @Size(max = 64)
     @Column(name = "PASSWORD")
     private String password;
     @Size(max = 25)

@@ -2,8 +2,14 @@ package bankApplication;
 
 import bankApplication.util.JsfUtil;
 import bankApplication.util.JsfUtil.PersistAction;
-
+import org.apache.commons.codec.binary.Hex;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -92,6 +98,8 @@ public class CustomeruserController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
+                   selected.setPassword(getHashedPassword(selected.getPassword()));
+                   //getHashedPassword(selected.getUsername());
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);
@@ -113,6 +121,22 @@ public class CustomeruserController implements Serializable {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
+    }
+    
+    public String getHashedPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.trim().getBytes(StandardCharsets.UTF_8));
+        //String sha256hex = Base64.getEncoder().encodeToString(hash);
+        //String sha256hex = new String(Hex.encode(hash));
+        System.out.println(password);
+        System.out.println(hash);
+        //System.out.println(sha256hex);
+        return bytesToHex(hash);
+    }
+     public static String bytesToHex(byte[] bytes) {
+        StringBuffer result = new StringBuffer();
+        for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
+        return result.toString();
     }
 
     public Customeruser getCustomeruser(java.lang.Integer id) {

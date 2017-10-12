@@ -57,6 +57,12 @@
                             </f:facet>
                             <h:outputText value="#{item.email}"/>
                         </p:column >
+                        <p:column filterBy="#{item.username}" footerText="contains" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_username}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.username}"/>
+                        </p:column >
                         <p:column filterBy="#{item.password}" footerText="contains" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomeruserTitle_password}"/>

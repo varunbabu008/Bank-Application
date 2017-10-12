@@ -52,6 +52,9 @@ public class Customeruser implements Serializable {
     @Size(max = 20)
     @Column(name = "LASTNAME")
     private String lastname;
+    @Size(max = 20)
+    @Column(name = "USERNAME")
+    private String username;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 20)
     @Column(name = "EMAIL")
@@ -139,6 +142,14 @@ public class Customeruser implements Serializable {
 
     public void setTypes(Integer types) {
         this.types = types;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @XmlTransient

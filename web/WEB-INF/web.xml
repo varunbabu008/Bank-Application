@@ -5,8 +5,8 @@
         <param-value>Development</param-value>
     </context-param>
     <context-param>
-     <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-     <param-value>client</param-value>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
@@ -53,6 +53,25 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+    <security-constraint>
+        <display-name>PublicConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>public</web-resource-name>
+            <description>public </description>
+            <url-pattern>/public/*</url-pattern>
+            <url-pattern>/faces/public/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>PublicConstraint</description>
+            <role-name>public</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description>PublicConstraint</description>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>JDBC_Security</realm-name>
@@ -64,5 +83,9 @@
     <security-role>
         <description>Administrator</description>
         <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <description>public</description>
+        <role-name>public</role-name>
     </security-role>
 </web-app>

@@ -102,7 +102,14 @@ public class Auth implements Serializable{
             externalContext.getSessionMap().put("user", user);
             externalContext.getSessionMap().put("user", cu);
             // externalContext.redirect(originalURL);
-            return "/admin/index";
+            // checking if the user is an public 
+            if (cu.getTypes()==1){
+                return "/public/index";
+            }
+            else{
+                return "/admin/index";
+            }
+            
         } catch (ServletException e) {
             // Handle unknown username/password in request.login().
             context.addMessage(null, new FacesMessage("Unknown login"));

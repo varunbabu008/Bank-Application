@@ -82,14 +82,25 @@ public class Auth implements Serializable{
         try {
             request.login(username, password);
             UsersController uc = retrieveUsersController();
+            CustomeruserController cc = retrieveCustomerUserController();
             
             // had to change getEntity manager from protected to public - Not so good
             TypedQuery<Users> query = 
                     uc.getFacade().getEntityManager().
                     createNamedQuery("Users.findByUsername", Users.class).
                     setParameter("username", username);
-            Users user = query.getSingleResult();           
+            
+            
+            Users user = query.getSingleResult();  
+            TypedQuery<Customeruser> query2 = 
+                    cc.getFacade().getEntityManager().
+                    createNamedQuery("Customeruser.findByUsername", Customeruser.class).
+                    setParameter("username", username);
+            
+            Customeruser cu = query2.getSingleResult();
+            
             externalContext.getSessionMap().put("user", user);
+            externalContext.getSessionMap().put("user", cu);
             // externalContext.redirect(originalURL);
             return "/admin/index";
         } catch (ServletException e) {
@@ -109,5 +120,9 @@ public class Auth implements Serializable{
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         return (UsersController) elContext.getELResolver().getValue(elContext, null, "usersController");
     }
+     public CustomeruserController retrieveCustomerUserController(){
+         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+         return (CustomeruserController) elContext.getELResolver().getValue(elContext, null, "customeruserController");
+     }
      
 }

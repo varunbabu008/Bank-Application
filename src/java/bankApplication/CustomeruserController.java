@@ -50,7 +50,7 @@ public class CustomeruserController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private CustomeruserFacade getFacade() {
+    public CustomeruserFacade getFacade() {
         return ejbFacade;
     }
 

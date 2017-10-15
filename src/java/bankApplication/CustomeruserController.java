@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELContext;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -82,10 +83,11 @@ public class CustomeruserController implements Serializable {
     public List<Customeruser> getFilteredItems() {
         return filteredItems;
     }
- 
+
     public void setFilteredItems(List<Customeruser> filteredItems) {
         this.filteredItems = filteredItems;
     }
+
     public List<Customeruser> getItems() {
         if (items == null) {
             items = getFacade().findAll();
@@ -98,8 +100,13 @@ public class CustomeruserController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                   selected.setPassword(getHashedPassword(selected.getPassword()));
-                   //getHashedPassword(selected.getUsername());
+                    if (persistAction == persistAction.CREATE) {
+                        selected.setPassword(getHashedPassword(selected.getPassword()));
+                        UsersController uc = retrieveUsersController();
+                        Users user = getUserToInsertToLoginTable();
+                        uc.getFacade().create(user);
+                    }
+
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);
@@ -122,21 +129,38 @@ public class CustomeruserController implements Serializable {
             }
         }
     }
-    
-    public String getHashedPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+
+    public Users getUserToInsertToLoginTable() {
+        Users u = new Users();
+        u.setUsername(selected.getUsername());
+        u.setPassword(selected.getPassword());
+        if (selected.getTypes() == 1) {
+            u.setUsertype("public");
+        } else {
+            u.setUsertype("admin");
+        }
+      return u;
+    }
+
+    public String getHashedPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(password.trim().getBytes(StandardCharsets.UTF_8));
-        //String sha256hex = Base64.getEncoder().encodeToString(hash);
-        //String sha256hex = new String(Hex.encode(hash));
         System.out.println(password);
         System.out.println(hash);
-        //System.out.println(sha256hex);
         return bytesToHex(hash);
     }
-     public static String bytesToHex(byte[] bytes) {
+
+    public static String bytesToHex(byte[] bytes) {
         StringBuffer result = new StringBuffer();
-        for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
+        for (byte byt : bytes) {
+            result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
+        }
         return result.toString();
+    }
+
+    public UsersController retrieveUsersController() {
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        return (UsersController) elContext.getELResolver().getValue(elContext, null, "usersController");
     }
 
     public Customeruser getCustomeruser(java.lang.Integer id) {

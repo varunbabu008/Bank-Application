@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/publicTemplate.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListAccountTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="AccountListForm">
+                <p:panel header="#{bundle.ListAccountTitle}">
+                    <p:dataTable id="datalist" value="#{accountsPublicController.items}" var="item"
+                                 selectionMode="single" selection="#{accountsPublicController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.acid}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update=" viewButton editButton "/>
+                        <p:ajax event="rowUnselect" update=" viewButton editButton "/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListAccountTitle_acid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.acid}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListAccountTitle_acbal}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.acbal}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListAccountTitle_actype}"/>
+                                <p:selectOneButton>
+                                    <f:converter converterId="javax.faces.Integer" />
+                                    <f:selectItem itemLabel="S" itemValue="1" />
+                                    <f:selectItem itemLabel="C" itemValue="2" />                      
+                                </p:selectOneButton>
+                            </f:facet>
+                            <h:outputText value="#{item.actype ==1 ? 'Saving': 'Credit'}" />                           
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListAccountTitle_custid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.custid}"/>
+                        </p:column>
+                        <f:facet name="footer">                        
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":AccountViewForm" oncomplete="PF('AccountViewDialog').show()" disabled="#{empty accountsPublicController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":AccountEditForm" oncomplete="PF('AccountEditDialog').show()" disabled="#{empty accountsPublicController.selected}"/>                           
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+        
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

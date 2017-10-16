@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/publicTemplate.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListCustomeruserTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="CustomeruserListForm">
+                <p:panel header="#{bundle.ListCustomeruserTitle}">
+                    <p:dataTable id="datalist" value="#{customeruserPublicController.items}" var="item"
+                                 selectionMode="single" selection="#{customeruserPublicController.selected}"
+                                 widgetVar="customerTable" emptyMessage="No customers were found"
+                                 paginator="true"
+                                 rowKey="#{item.cusid}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update=" viewButton editButton "/>
+                        <p:ajax event="rowUnselect" update=" viewButton editButton "/>
+                       
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_cusid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cusid}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_firstname}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstname}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_lastname}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.lastname}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_email}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_username}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.username}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_password}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.password}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_address}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.address}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomeruserTitle_phonenumber}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.phonenumber}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">                                
+                                <p:selectOneButton onchange="PF('customerTable').filter()">
+                                    <f:converter converterId="javax.faces.Integer" />
+                                    <f:selectItem itemLabel="P" itemValue="1" />
+                                    <f:selectItem itemLabel="BW" itemValue="2" />                      
+                                </p:selectOneButton>
+                            </f:facet>
+                            <h:outputText value="#{item.types ==1 ? 'Public': 'BankWorker'}" />
+                        </p:column>
+                        <f:facet name="footer">                           
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":CustomeruserViewForm" oncomplete="PF('CustomeruserViewDialog').show()" disabled="#{empty customeruserPublicController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":CustomeruserEditForm" oncomplete="PF('CustomeruserEditDialog').show()" disabled="#{empty customeruserPublicController.selected}"/>                          
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>      
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

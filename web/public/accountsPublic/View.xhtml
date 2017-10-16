@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AccountViewDlg" widgetVar="AccountViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewAccountTitle}">
+            <h:form id="AccountViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{accountController.selected != null}">
+                        <h:outputText value="#{bundle.ViewAccountLabel_acid}"/>
+                        <h:outputText value="#{accountController.selected.acid}" title="#{bundle.ViewAccountTitle_acid}"/>
+                        <h:outputText value="#{bundle.ViewAccountLabel_acbal}"/>
+                        <h:outputText value="#{accountController.selected.acbal}" title="#{bundle.ViewAccountTitle_acbal}"/>
+                        <h:outputText value="#{bundle.ViewAccountLabel_actype}"/>
+                        <h:outputText value="#{accountController.selected.actype}" title="#{bundle.ViewAccountTitle_actype}"/>
+                        <h:outputText value="#{bundle.ViewAccountLabel_custid}"/>
+                        <h:outputText value="#{accountController.selected.custid}" title="#{bundle.ViewAccountTitle_custid}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="AccountViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

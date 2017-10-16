@@ -58,6 +58,7 @@
         <web-resource-collection>
             <web-resource-name>public</web-resource-name>
             <description>public </description>
+            <url-pattern>/public/customerUserPublic/*</url-pattern>
             <url-pattern>/public/*</url-pattern>
             <url-pattern>/faces/public/*</url-pattern>
             <http-method>GET</http-method>

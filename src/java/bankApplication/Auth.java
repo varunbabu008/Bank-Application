@@ -7,6 +7,7 @@ package bankApplication;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -74,15 +75,17 @@ public class Auth implements Serializable{
     public void setOriginalURL(String originalURL) {
         this.originalURL = originalURL;
     }
-     public String login() throws IOException {
+    public String login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
         try {
             request.login(username, password);
+            System.out.println("varun: logged in ");
             UsersController uc = retrieveUsersController();
             CustomeruserController cc = retrieveCustomerUserController();
+            AccountController ac = retrieveAccountController();
             
             // had to change getEntity manager from protected to public - Not so good
             TypedQuery<Users> query = 
@@ -99,21 +102,33 @@ public class Auth implements Serializable{
             
             Customeruser cu = query2.getSingleResult();
             
+            TypedQuery<Account> query3 = 
+                    ac.getFacade().getEntityManager().                   
+                    createNamedQuery("Account.findByCustID", Account.class).
+                    setParameter("custid", cu);
+            System.out.println(cu.getCusid());
+            List<Account> accounts = query3.getResultList();
+            
             externalContext.getSessionMap().put("user", user);
-            externalContext.getSessionMap().put("user", cu);
+            externalContext.getSessionMap().put("CustomerUser", cu);
+            externalContext.getSessionMap().put("Accounts", accounts);
             // externalContext.redirect(originalURL);
+            
             // checking if the user is an public 
-            if (cu.getTypes()==1){
-                return "/public/index";
+            if (request.isUserInRole("public")){
+                //externalContext.redirect(externalContext.getRequestContextPath() + "/public/index");
+                return "/public/index?faces-redirect=true";
             }
             else{
-                return "/admin/index";
+                //externalContext.redirect(externalContext.getRequestContextPath() + "/admin/index");
+                return "/admin/index?faces-redirect=true";
             }
             
         } catch (ServletException e) {
             // Handle unknown username/password in request.login().
             context.addMessage(null, new FacesMessage("Unknown login"));
-            return "/login";
+            //externalContext.redirect(externalContext.getRequestContextPath() + "/login");
+            return "login?faces-redirect=true";
         }
     }
 
@@ -130,6 +145,11 @@ public class Auth implements Serializable{
      public CustomeruserController retrieveCustomerUserController(){
          ELContext elContext = FacesContext.getCurrentInstance().getELContext();
          return (CustomeruserController) elContext.getELResolver().getValue(elContext, null, "customeruserController");
+     }
+     
+     public AccountController retrieveAccountController(){
+         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+         return (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
      }
      
 }

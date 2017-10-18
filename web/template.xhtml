@@ -25,9 +25,9 @@
                     <p:menubar>
                         <p:menuitem value="#{bundle.Home}" outcome="/admin/index" icon="ui-icon-home"/>
                         <p:submenu label="#{bundle.Manage}">
-                            <p:menuitem value="Account" outcome="/account/List.xhtml" />
-                            <p:menuitem value="Customeruser" outcome="/customeruser/List.xhtml" />
-                            <p:menuitem value="Transactions" outcome="/banktansactions/List.xhtml" />
+                            <p:menuitem value="Account" outcome="/admin/account/List.xhtml" />
+                            <p:menuitem value="Customeruser" outcome="/admin/customeruser/List.xhtml" />
+                            <p:menuitem value="Transactions" outcome="/admin/banktansactions/List.xhtml" />
                         </p:submenu>
                         <f:facet name="options">
                         <p:commandButton value = "Logout!" action="#{auth.logout()}"/> 

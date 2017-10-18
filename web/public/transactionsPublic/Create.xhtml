@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BanktansactionsCreateDlg" widgetVar="BanktansactionsCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateBanktansactionsTitle}">
+            <h:form id="BanktansactionsCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{banktansactionsController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_amount}" for="amount" />
+                        <p:inputText id="amount" value="#{banktansactionsController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />                      
+                        <p:outputLabel value="From Account" for="accountid1" />
+                        <p:selectOneMenu id="accountid1" value="#{banktansactionsController.selected.fromaccnt}" >
+                            <f:selectItems value="#{accountController.itemsAvailableSelectOne}"
+                                           var="accountidItem"
+                                           itemValue="#{accountidItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="To Account" for="accountid" />
+                        <p:selectOneMenu id="accountid" value="#{banktansactionsController.selected.accountid}" >
+                            <f:selectItems value="#{accountController.itemsAvailableSelectOne}"
+                                           var="accountidItem"
+                                           itemValue="#{accountidItem}"/>
+                        </p:selectOneMenu>
+                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{banktansactionsController.create}" value="#{bundle.Save}" update="display,:BanktansactionsListForm:datalist,:growl" oncomplete="handleSubmit(args,'BanktansactionsCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BanktansactionsCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

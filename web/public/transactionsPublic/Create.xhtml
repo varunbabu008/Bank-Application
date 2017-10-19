@@ -11,24 +11,24 @@
         <p:dialog id="BanktansactionsCreateDlg" widgetVar="BanktansactionsCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateBanktansactionsTitle}">
             <h:form id="BanktansactionsCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{banktansactionsController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{banktansactionsPublicController.selected != null}">
                         <p:outputLabel value="#{bundle.CreateBanktansactionsLabel_amount}" for="amount" />
-                        <p:inputText id="amount" value="#{banktansactionsController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />                      
+                        <p:inputText id="amount" value="#{banktansactionsPublicController.selected.amount}" title="#{bundle.CreateBanktansactionsTitle_amount}" />                      
                         <p:outputLabel value="From Account" for="accountid1" />
-                        <p:selectOneMenu id="accountid1" value="#{banktansactionsController.selected.fromaccnt}" >
-                            <f:selectItems value="#{accountController.itemsAvailableSelectOne}"
+                        <p:selectOneMenu id="accountid1" value="#{banktansactionsPublicController.selected.fromaccnt}" >
+                            <f:selectItems value="#{accountsPublicController.itemsAvailableSelectOne}"
                                            var="accountidItem"
                                            itemValue="#{accountidItem}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="To Account" for="accountid" />
-                        <p:selectOneMenu id="accountid" value="#{banktansactionsController.selected.accountid}" >
+                        <p:selectOneMenu id="accountid" value="#{banktansactionsPublicController.selected.accountid}" >
                             <f:selectItems value="#{accountController.itemsAvailableSelectOne}"
                                            var="accountidItem"
                                            itemValue="#{accountidItem}"/>
                         </p:selectOneMenu>
                         
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{banktansactionsController.create}" value="#{bundle.Save}" update="display,:BanktansactionsListForm:datalist,:growl" oncomplete="handleSubmit(args,'BanktansactionsCreateDialog');"/>
+                    <p:commandButton actionListener="#{banktansactionsPublicController.create}" value="#{bundle.Save}" update="display,:BanktansactionsListForm:datalist,:growl" oncomplete="handleSubmit(args,'BanktansactionsCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="BanktansactionsCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

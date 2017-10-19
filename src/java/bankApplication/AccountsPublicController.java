@@ -82,10 +82,10 @@ public class AccountsPublicController implements Serializable {
     public List<Account> getItems() {
         if (items == null) {
             FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext externalContext = context.getExternalContext();
+            ExternalContext externalContext = context.getExternalContext();
         
-        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest(); 
-        List<Account> accounts = (List<Account>) request.getSession().getAttribute("Accounts");
+            HttpServletRequest request = (HttpServletRequest) externalContext.getRequest(); 
+            List<Account> accounts = (List<Account>) request.getSession().getAttribute("Accounts");
         
             items = accounts;
         }
@@ -129,7 +129,7 @@ public class AccountsPublicController implements Serializable {
     }
 
     public List<Account> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        return getItems();
     }
 
     @FacesConverter(forClass=Account.class)

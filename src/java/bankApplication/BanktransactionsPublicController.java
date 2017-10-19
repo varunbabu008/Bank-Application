@@ -6,6 +6,7 @@ import bankApplication.util.JsfUtil.PersistAction;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,9 +23,11 @@ import javax.el.ELContext;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Named("banktansactionsPublicController")
@@ -86,7 +89,16 @@ public class BanktransactionsPublicController implements Serializable {
 
     public List<Banktansactions> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = context.getExternalContext();
+        
+            HttpServletRequest request = (HttpServletRequest) externalContext.getRequest(); 
+            List<Account> accounts = (List<Account>) request.getSession().getAttribute("Accounts");
+            List<Banktansactions> btrns = new ArrayList<>();
+            for(Account a : accounts){
+               btrns.addAll(a.getBanktansactionsCollection());
+            }
+            items = btrns;
         }
         return items;
     }

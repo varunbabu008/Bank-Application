@@ -55,7 +55,7 @@ public class BanktansactionsController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private BanktansactionsFacade getFacade() {
+    public BanktansactionsFacade getFacade() {
         return ejbFacade;
     }
 

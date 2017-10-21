@@ -183,7 +183,7 @@ public class CustomerUserPublicController implements Serializable {
                 return null;
             }
             CustomeruserController controller = (CustomeruserController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "customeruserController");
+                    getValue(facesContext.getELContext(), null, "customeruserPublicController");
             return controller.getCustomeruser(getKey(value));
         }
 

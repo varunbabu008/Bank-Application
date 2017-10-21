@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Banktansactions.findByTrid", query = "SELECT b FROM Banktansactions b WHERE b.trid = :trid"),
     @NamedQuery(name = "Banktansactions.findByAmount", query = "SELECT b FROM Banktansactions b WHERE b.amount = :amount"),
     @NamedQuery(name = "Banktansactions.findByTrtime", query = "SELECT b FROM Banktansactions b WHERE b.trtime = :trtime"),
-    @NamedQuery(name = "Banktansactions.findByAccountID", query = "SELECT b FROM Banktansactions b WHERE b.accountid IN(:accounts)")})   
+    @NamedQuery(name = "Banktansactions.count", query = "Select COUNT(b) FROM Banktansactions b WHERE b.fromaccnt IN :list"),
+    @NamedQuery(name = "Banktansactions.findByfromAccount", query = "SELECT b FROM Banktansactions b WHERE b.fromaccnt IN :list")})
 public class Banktansactions implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,8 +55,11 @@ public class Banktansactions implements Serializable {
     @JoinColumn(name = "ACCOUNTID", referencedColumnName = "ACID")
     @ManyToOne
     private Account accountid;
-    
+
     private Account fromaccnt;
+
+    @Column(name = "fromAccnt")
+    private Integer fromAccount;
 
     public Banktansactions() {
     }
@@ -67,6 +71,14 @@ public class Banktansactions implements Serializable {
     public Banktansactions(Integer trid, Date trtime) {
         this.trid = trid;
         this.trtime = trtime;
+    }
+
+    public Integer getFromAccount() {
+        return fromAccount;
+    }
+
+    public void setFromAccount(Integer fromAccount) {
+        this.fromAccount = fromAccount;
     }
 
     public Integer getTrid() {
@@ -100,7 +112,7 @@ public class Banktansactions implements Serializable {
     public void setAccountid(Account accountid) {
         this.accountid = accountid;
     }
-    
+
     public Account getFromaccnt() {
         return fromaccnt;
     }
@@ -133,5 +145,5 @@ public class Banktansactions implements Serializable {
     public String toString() {
         return "bankApplication.Banktansactions[ trid=" + trid + " ]";
     }
-    
+
 }

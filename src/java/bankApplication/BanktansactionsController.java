@@ -127,6 +127,7 @@ public class BanktansactionsController implements Serializable {
                     double checkbalance = from.getAcbal() - (double) selected.getAmount();
                     if (checkbalance > 0) {                       
                         selected.setTrtime(getCurrentTime());
+                        selected.setFromAccount(from.getAcid());
                         getFacade().edit(selected);
                         double fromBal = from.getAcbal() - (double) selected.getAmount();
                         double tobal = to.getAcbal() + (double) selected.getAmount();

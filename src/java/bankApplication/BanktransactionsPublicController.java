@@ -29,18 +29,17 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.servlet.http.HttpServletRequest;
 
-
 @Named("banktansactionsPublicController")
 @SessionScoped
 public class BanktransactionsPublicController implements Serializable {
 
-
-    @EJB private bankApplication.BanktansactionsFacade ejbFacade;
+    @EJB
+    private bankApplication.BanktansactionsFacade ejbFacade;
     private List<Banktansactions> items = null;
     private List<Banktansactions> filteredItems = null;
-    
+
     private Banktansactions selected;
-    
+
     public BanktransactionsPublicController() {
     }
 
@@ -88,38 +87,44 @@ public class BanktransactionsPublicController implements Serializable {
     }
 
     public List<Banktansactions> getItems() {
-        if (items == null) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = context.getExternalContext();
-        
-            HttpServletRequest request = (HttpServletRequest) externalContext.getRequest(); 
-            List<Account> accounts = (List<Account>) request.getSession().getAttribute("Accounts");
-            List<Banktansactions> btrns = new ArrayList<>();
-            for(Account a : accounts){
-               btrns.addAll(a.getBanktansactionsCollection());
-            }
-            items = btrns;
+        if (items == null) {             
+            items =  getSesssion();
         }
         return items;
     }
+
+    private List<Banktansactions> getSesssion() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        List<Banktansactions> transactions = (List<Banktansactions>) request.getSession().getAttribute("Transactions");
+        return transactions;
+    }
+    private void setSesssion(List<Banktansactions> trans) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();      
+        externalContext.getSessionMap().put("Transactions", trans);
+    }
     
-     public List<Banktansactions> getFilteredItems() {
+
+    public List<Banktansactions> getFilteredItems() {
         return filteredItems;
     }
-     public void setFilteredItems(List<Banktansactions> filteredItems) {
+
+    public void setFilteredItems(List<Banktansactions> filteredItems) {
         this.filteredItems = filteredItems;
     }
-     
-     public boolean filterByBalance(Object value, Object filter, Locale locale) {
+
+    public boolean filterByBalance(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
-        if(filterText == null||filterText.equals("")) {
+        if (filterText == null || filterText.equals("")) {
             return true;
         }
-         
-        if(value == null) {
+
+        if (value == null) {
             return false;
         }
-         
+
         return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
     }
 
@@ -128,7 +133,7 @@ public class BanktransactionsPublicController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    AccountController ac = retrieveAccountController();
+                    AccountsPublicController ac = retrieveAccountController();
                     Account to = ac.getFacade().find(selected.getAccountid().getAcid());
                     Account from = ac.getFacade().find(selected.getFromaccnt().getAcid());
 
@@ -137,8 +142,9 @@ public class BanktransactionsPublicController implements Serializable {
                         return;
                     }
                     double checkbalance = from.getAcbal() - (double) selected.getAmount();
-                    if (checkbalance > 0) {                       
+                    if (checkbalance > 0) {
                         selected.setTrtime(getCurrentTime());
+                        selected.setFromAccount(from.getAcid());
                         getFacade().edit(selected);
                         double fromBal = from.getAcbal() - (double) selected.getAmount();
                         double tobal = to.getAcbal() + (double) selected.getAmount();
@@ -146,8 +152,11 @@ public class BanktransactionsPublicController implements Serializable {
                         to.setAcbal(tobal);
                         from.setAcbal(fromBal);
                         ac.getFacade().edit(to);
-                        ac.getFacade().edit(from);                  
+                        ac.getFacade().edit(from);
                         ac.destroyItems();
+                        List<Banktansactions> trns = getSesssion();
+                       
+                        
 
                     } else {
                         JsfUtil.addErrorMessage("Insufficient funds");
@@ -175,7 +184,7 @@ public class BanktransactionsPublicController implements Serializable {
             }
         }
     }
-    
+
     public Date getCurrentTime() {
         Calendar calendar = new GregorianCalendar();
         TimeZone timeZone = TimeZone.getTimeZone("Australia/Sydney");
@@ -183,10 +192,10 @@ public class BanktransactionsPublicController implements Serializable {
         Date currentTime = calendar.getTime();
         return currentTime;
     }
-    
-    public AccountController retrieveAccountController(){
+
+    public AccountsPublicController retrieveAccountController() {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-        return (AccountController) elContext.getELResolver().getValue(elContext, null, "accountController");
+        return (AccountsPublicController) elContext.getELResolver().getValue(elContext, null, "accountsPublicController");
     }
 
     public Banktansactions getBanktansactions(java.lang.Integer id) {
@@ -201,7 +210,7 @@ public class BanktransactionsPublicController implements Serializable {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass=Banktansactions.class)
+    @FacesConverter(forClass = Banktansactions.class)
     public static class BanktansactionsControllerConverter implements Converter {
 
         @Override
@@ -209,8 +218,8 @@ public class BanktransactionsPublicController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            BanktansactionsController controller = (BanktansactionsController)facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "banktansactionsController");
+            BanktansactionsController controller = (BanktansactionsController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "banktansactionsPublicController");
             return controller.getBanktansactions(getKey(value));
         }
 

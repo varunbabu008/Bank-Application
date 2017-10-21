@@ -141,7 +141,7 @@ public class AccountsPublicController implements Serializable {
                 return null;
             }
             AccountController controller = (AccountController)facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "accountController");
+                    getValue(facesContext.getELContext(), null, "accountsPublicController");
             return controller.getAccount(getKey(value));
         }
 

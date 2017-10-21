@@ -7,7 +7,9 @@ package bankApplication;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.annotation.PostConstruct;
@@ -110,11 +112,29 @@ public class Auth implements Serializable {
                     setParameter("custid", cu);
             System.out.println(cu.getCusid());
             List<Account> accounts = query3.getResultList();
-
+            List<Integer> Ids= new ArrayList<Integer>();
+            Integer[] ids = new Integer[accounts.size()];
+            for(Account account: accounts){
+                Ids.add(account.getAcid());
+            }          
+            
+            TypedQuery<Banktansactions> query4
+                    = bc.getFacade().getEntityManager().
+                    createNamedQuery("Banktansactions.findByfromAccount", Banktansactions.class).
+                    setParameter("list", Ids);
+             TypedQuery<Banktansactions> query5
+                    = bc.getFacade().getEntityManager().
+                    createNamedQuery("Banktansactions.count", Banktansactions.class).
+                    setParameter("list", Ids);
+            System.out.println(cu.getCusid());
+            List<Banktansactions> banktansactions = query4.getResultList();
+            externalContext.getSessionMap().put("Transactions", banktansactions);
+          
+                    
             externalContext.getSessionMap().put("user", user);
             externalContext.getSessionMap().put("CustomerUser", cu);
             externalContext.getSessionMap().put("Accounts", accounts);
-            //externalContext.getSessionMap().put("Transactions", transactions);
+            
 
             if (request.isUserInRole("public")) {
                 return "/public/index?faces-redirect=true";
@@ -122,13 +142,18 @@ public class Auth implements Serializable {
                 return "/admin/index?faces-redirect=true";
             }
 
-        } catch (ServletException e) {
+        } 
+        catch (ServletException e) {
             // Handle unknown username/password in request.login().
             context.addMessage(null, new FacesMessage("Unknown login"));
             return "login?faces-redirect=true";
         }
     }
 
+    
+    public boolean objExists(TypedQuery tq) {
+        return tq.getResultList().size() > 0;
+}
     public int[] toIntArray(List<Integer> list) {
         int[] ret = new int[list.size()];
         int i = 0;
